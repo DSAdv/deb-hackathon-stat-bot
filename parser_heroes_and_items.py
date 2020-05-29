@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 
-url = "https://dota2.ru/heroes/"
 
 def _get_html(url):
     r = requests.get(url)
@@ -10,6 +9,7 @@ def _get_html(url):
 
 
 def parse_heroes():
+    url = "https://dota2.ru/heroes/"
     result = list()
     dota_url = "https://dota2.ru/"
     soup = _get_html(url)
@@ -25,4 +25,19 @@ def parse_heroes():
                        "Portrait":dota_url + portrait})
     return result
 
-print(parse_heroes())
+
+def parse_items():
+    url = "https://dota2.ru/items/"
+    result = list()
+    dota_url = "https://dota2.ru/"
+    soup = _get_html(url)
+    div_inf = soup.find("div", id="list")
+    all_items = div_inf.find_all("a")
+    for item in all_items:
+        name =item.find("div", class_="title").text
+        icon = item.find("img").get("src")
+        result.append({"Name": name,
+                       "Icon": dota_url + icon})
+    return result
+
+
