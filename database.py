@@ -49,6 +49,13 @@ class Heroes(Base):
     hero_portrait = db.Column(db.String(length=240))
 
 
+class Items(Base):
+    __tablename__ = "items"
+    item_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(length=120))
+    icon = db.Column(db.String(length=240))
+
+
 class DBDriver:
     # engine = engine
 
@@ -97,6 +104,14 @@ class DBDriver:
                 return None
             insert_query = db.insert(Games)
             connection.execute(insert_query, match)
+
+    @classmethod
+    def add_item(cls, item):
+        with engine.connect() as connection:
+            if not any(item):
+                return None
+            insert_query = db.insert(Items)
+            connection.execute(insert_query, item)
 
 
 if __name__ == '__main__':
