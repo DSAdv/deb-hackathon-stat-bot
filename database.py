@@ -33,7 +33,8 @@ class Games(Base):
     game_end_time = db.Column(db.DateTime())
     list_heroes1 = db.Column(db.String(length=120))
     list_heroes2 = db.Column(db.String(length=120))
-
+    match_id = db.Column(db.Integer())
+    match_url = db.Column(db.String(length=240))
 
 class Heroes(Base):
     hero_id = db.Column(db.Integer(), primary_key=True)
