@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 # from bot.referral_link import ReferralLink
 from config import Config
 
-engine = db.create_engine(Config.DB_URI)
+engine = Config.DB_URI
 Base = declarative_base(bind=engine)
 
 
@@ -24,31 +24,33 @@ class TelegramUser(Base):
 
 
 class Games(Base):
+    __tablename__ = "games"
+
     game_id = db.Column(db.Integer(), primary_key=True)
     tournament = db.Column(db.String(length=120))
     team1 = db.Column(db.String(length=120))
     team2 = db.Column(db.String(length=120))
     number_of_murders_t1 = db.Column(db.Integer())
     number_of_murders_t2 = db.Column(db.Integer())
-    game_end_time = db.Column(db.DateTime())
+    game_time = db.Column(db.String(length=120))
+    game_end_time = db.Column(db.String(length=120))
     list_heroes1 = db.Column(db.String(length=120))
     list_heroes2 = db.Column(db.String(length=120))
-    match_id = db.Column(db.Integer())
+    match_id = db.Column(db.String(length=120))
     match_url = db.Column(db.String(length=240))
 
+
 class Heroes(Base):
+    __tablename__ = "heroes"
+
     hero_id = db.Column(db.Integer(), primary_key=True)
     hero_name = db.Column(db.String(length=120))
     hero_icon = db.Column(db.String(length=240))
     hero_portrait = db.Column(db.String(length=240))
 
 
-class Statistics(Base):
-    pass
-
-
 class DBDriver:
-    engine = engine
+    # engine = engine
 
     @classmethod
     def is_new_user(cls, user_id):
@@ -60,7 +62,6 @@ class DBDriver:
             insert_query = db.insert(TelegramUser)
             if parent_ref_code:
                 user_dict["parent_code"] = parent_ref_code
-            # user_dict["referral_code"] = ReferralLink.generate_ref_code()
             connection.execute(insert_query, user_dict)
 
     @classmethod
@@ -80,6 +81,22 @@ class DBDriver:
             )
             data = list(map(dict, result))
             return data
+
+    @classmethod
+    def add_heroes(cls, hero):
+        with engine.connect() as connection:
+            if not any(hero):
+                return None
+            insert_query = db.insert(Heroes)
+            connection.execute(insert_query, hero)
+
+    @classmethod
+    def add_match(cls, match):
+        with engine.connect() as connection:
+            if not any(match):
+                return None
+            insert_query = db.insert(Games)
+            connection.execute(insert_query, match)
 
 
 if __name__ == '__main__':
