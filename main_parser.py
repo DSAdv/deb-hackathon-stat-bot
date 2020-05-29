@@ -43,11 +43,18 @@ def get_tournament_matches(sections):
                 list_heroes_team_one = list()
                 for div in divs_heroes_team_one:
                     list_heroes_team_one.append(div.find('img').get('alt'))
+                heroes_team_one = list_heroes_team_one[0] + ', ' + list_heroes_team_one[1] + ', '\
+                                  + list_heroes_team_one[2] + ', ' + list_heroes_team_one[3] + ', ' \
+                                  + list_heroes_team_one[4]
+
 
                 divs_heroes_team_two = match.find('div', class_='match-score-heroes').find('div', class_='dire').find_all('div')
                 list_heroes_team_two = list()
                 for div in divs_heroes_team_two:
                     list_heroes_team_two.append(div.find('img').get('alt'))
+                heroes_team_two = list_heroes_team_two[0] + ', ' + list_heroes_team_two[1] + ', ' \
+                                  + list_heroes_team_two[2] + ', ' + list_heroes_team_two[3] + ', ' \
+                                  + list_heroes_team_two[4]
 
                 game_time = match.find('div', class_='match-score-info').find('div', class_='pull-left').get_text()
                 datetime = match.find('div', class_='match-score-info').find('div',
@@ -58,11 +65,11 @@ def get_tournament_matches(sections):
                     'tournament': tournament_name,
                     'team1': team_one,
                     'team2': team_two,
-                    'number_of_murders_t1 ': team_one_killing,
+                    'number_of_murders_t1': team_one_killing,
                     'number_of_murders_t2': team_two_killing,
                     'game_end_time': time,
-                    'list_heroes1 ': list_heroes_team_one,
-                    'list_heroes2': list_heroes_team_two,
+                    'list_heroes1': heroes_team_one,
+                    'list_heroes2': heroes_team_two,
                     'match_id': match_id,
                     'match_url': reference_tournamet,
                     'game_time': game_time
