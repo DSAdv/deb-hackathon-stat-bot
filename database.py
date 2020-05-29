@@ -1,7 +1,7 @@
 import sqlalchemy as db
 from sqlalchemy.ext.declarative import declarative_base
 
-from bot.referral_link import ReferralLink
+# from bot.referral_link import ReferralLink
 from config import Config
 
 engine = db.create_engine(Config.DB_URI)
@@ -19,6 +19,8 @@ class TelegramUser(Base):
     language_code = db.Column(db.String(length=10))
     referral_code = db.Column(db.String(length=64))
     parent_code = db.Column(db.String(length=64))
+    steam_id = db.Column(db.Integer())
+    region = db.Column(db.String(length=120))
 
 
 class Games(Base):
@@ -26,10 +28,11 @@ class Games(Base):
     tournament = db.Column(db.String(length=120))
     team1 = db.Column(db.String(length=120))
     team2 = db.Column(db.String(length=120))
-    number_of_murders_t1 = (db.Integer())
-    number_of_murders_t2 = (db.Integer())
-    game_end_time = (db.DateTime())
-    list_heroes = (db.String())
+    number_of_murders_t1 = db.Column(db.Integer())
+    number_of_murders_t2 = db.Column(db.Integer())
+    game_end_time = db.Column(db.DateTime())
+    list_heroes1 = db.Column(db.String(length=120))
+    list_heroes2 = db.Column(db.String(length=120))
 
 
 class Heroes(Base):
@@ -56,7 +59,7 @@ class DBDriver:
             insert_query = db.insert(TelegramUser)
             if parent_ref_code:
                 user_dict["parent_code"] = parent_ref_code
-            user_dict["referral_code"] = ReferralLink.generate_ref_code()
+            # user_dict["referral_code"] = ReferralLink.generate_ref_code()
             connection.execute(insert_query, user_dict)
 
     @classmethod
