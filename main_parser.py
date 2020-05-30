@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-
+from database import DBDriver
 
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36',
@@ -65,8 +65,8 @@ def get_tournament_matches(sections):
                     'tournament': tournament_name,
                     'team1': team_one,
                     'team2': team_two,
-                    'number_of_murders_t1': team_one_killing,
-                    'number_of_murders_t2': team_two_killing,
+                    'number_of_murders_t1': int(team_one_killing),
+                    'number_of_murders_t2': int(team_two_killing),
                     'game_end_time': time,
                     'list_heroes1': heroes_team_one,
                     'list_heroes2': heroes_team_two,
@@ -77,6 +77,7 @@ def get_tournament_matches(sections):
 
         else:
             continue
+        DBDriver.add_match(list_matches)
     return list_matches
 
 
